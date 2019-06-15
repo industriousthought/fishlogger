@@ -1,0 +1,158 @@
+.deselect-button {
+  float: right;
+}
+
+.filter-editor {
+  width: 90%;
+  position: absolute;
+  top: 1rem;
+  left: 5%;
+  z-index: 5;
+  flex-direction: row;
+  display: flex;
+}
+
+.filter-editor li:last-child ul {
+  right: 0rem;
+}
+
+.dropdown {
+  width: 200%;
+  transition: opacity 300ms ease-in;
+  border: 1px solid black;
+  color: black;
+  border-radius: 5px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  opacity: 0;
+  list-style: none;
+}
+
+.dropdown-transition-enter {
+  opacity: 0;
+}
+
+.dropdown-transition-enter-done {
+  opacity: 1;
+}
+
+.dropdown-transition-enter-active {
+  opacity: 1;
+}
+
+.dropdown-transition-exit {
+  opacity: 1;
+}
+
+.dropdown-transition-exit-active {
+  opacity: 0;
+}
+
+.dropdown-item:not(:first-child) {
+  border-top: 1px solid black;
+}
+
+.dropdown-item-transition-enter {
+  max-height: 0rem;
+  display: block!important;
+}
+
+.dropdown-item-transition-enter-active {
+  max-height: 2.5rem;
+  display: block!important;
+}
+
+.dropdown-item-transition-enter-done {
+  max-height: 2.5rem;
+  display: block!important;
+}
+
+.dropdown-item-transition-exit {
+  max-height: 2.5rem;
+  display: block!important;
+}
+
+.dropdown-item-transition-exit-done {
+  max-height: 0rem;
+  display: none;
+}
+
+.dropdown-item {
+  transition: height 300ms ease-in;
+  text-align: center;
+  display: none;
+}
+
+.filter-menu-toggle-enter {
+  width: 10%;
+}
+
+.filter-menu-toggle-enter-active {
+  width: 90%;
+  transition: width 300ms ease-in;
+}
+
+.filter-menu-toggle-exit {
+  width: 90%;
+}
+
+.filter-menu-toggle-exit-active {
+  width: 10%;
+  transition: width 300ms ease-in;
+}
+
+.filter-buttons-toggle-enter {
+  width: 0%;
+  opacity: 0 !important;
+  display: block;
+}
+
+.filter-buttons-toggle-enter-active {
+  width: 25%;
+  opacity: 1 !important;
+}
+
+.filter-buttons-toggle-exit {
+  width: 25%;
+  opacity: 1 !important;
+}
+
+.filter-buttons-toggle-exit-active {
+  width: 0%;
+  opacity: 0 !important;
+  display: none;
+}
+
+.dropdown-title {
+  overflow: hidden;
+  height: 1.1rem;
+}
+
+.filter-buttons {
+  width: 33%;
+  display: block;
+  float: left;
+  padding: 0;
+  height: 1.2rem;
+  position: relative;
+  border: 1px solid black;
+  border-radius: 5px;
+  background: white;
+  color: black;
+  transition: opacity 300ms ease-in, width 300ms ease-in, color 300ms ease-in, background 300ms ease-in;
+}
+
+.filter-toggle {
+
+}
+
+.filter-menu {
+  list-style: none;
+  #overflow: hidden;
+  position: relative;
+  flex-direction: row;
+  display: flex;
+}
+

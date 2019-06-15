@@ -1,0 +1,46 @@
+.close-graph {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  size: 3rem;
+}
+
+.graph-container {
+  z-index: 2;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: white;
+  opacity: .8;
+}
+
+.graph-view {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+}
+
+.graph-selector {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  bottom: 5%;
+  list-style: none;
+  height: 1.2rem;
+  width: 100%;
+}
+
+.graph-selector-button {
+  height: 1.2rem;
+  padding: .2rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: black;
+  background: white;
+  transition: background 300ms ease-in, color 300ms ease-in;
+}
