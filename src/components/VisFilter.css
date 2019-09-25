@@ -18,7 +18,7 @@
 
 .dropdown {
   width: 200%;
-  transition: opacity 300ms ease-in;
+  transition: width opacity 300ms ease-in;
   border: 1px solid black;
   color: black;
   border-radius: 5px;
@@ -87,19 +87,23 @@
 
 .filter-menu-toggle-enter {
   width: 10%;
+  opacity: 0;
 }
 
-.filter-menu-toggle-enter-active {
+.filter-menu-toggle-enter-done {
   width: 90%;
+  opacity: 1;
   transition: width 300ms ease-in;
 }
 
 .filter-menu-toggle-exit {
   width: 90%;
+  opacity: 1;
 }
 
-.filter-menu-toggle-exit-active {
+.filter-menu-toggle-exit-done {
   width: 10%;
+  opacity: 0;
   transition: width 300ms ease-in;
 }
 

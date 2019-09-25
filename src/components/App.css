@@ -2,21 +2,21 @@ li {
   list-style: none;
 }
 
-.vertical-menu {
+.sidebar-vertical-menu {
   display: none;
   transition: opacity 300ms ease-in;
   opacity: 0;
-  z-index: 3;
+  z-index: 5;
   position: absolute;
   border: 1px solid black;
   color: black;
   border-radius: 5px;
   background: white;
-  margin-left: 8rem;
+  margin-left: -4rem;
   margin-top: -1rem;
 }
 
-.vertical-menu > li:not(:first-child) {
+.sidebar-vertical-menu > li:not(:first-child) {
   border-top: 1px solid black;
 }
 
@@ -115,11 +115,12 @@ ul {
   display: block;
 }
 
-.location-button {
+.sidebar-button {
   border: 1px solid black;
   color: black;
   border-radius: 5px;
   background: white;
+  width: 9rem;
 }
 
 .save-location {

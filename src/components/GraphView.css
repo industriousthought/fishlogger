@@ -6,6 +6,7 @@
 }
 
 .graph-container {
+  display: none;
   z-index: 2;
   position: absolute;
   top: 5%;
@@ -13,7 +14,25 @@
   width: 90%;
   height: 90%;
   background: white;
-  opacity: .8;
+  opacity: 0;
+}
+
+.list-table {
+  border-collapse: collapse;
+}
+
+.list-table td{
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.list-view {
+  position: absolute;
+  overflow: auto;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
 }
 
 .graph-view {
