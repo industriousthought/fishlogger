@@ -1,8 +1,6 @@
 import { connect } from 'react-redux'
 import { actions } from '../slices'
 import MapComponent from '../components/Map'
-import getItem from './getItem'
-import filterCatches from './filterCatches'
 
 const mapStateToProps = state => ({
   locations: state.locations,
@@ -10,8 +8,6 @@ const mapStateToProps = state => ({
   bounds: state.ui.bounds,
   zoom: state.ui.zoom,
   allCatches: state.catches,
-  catches: filterCatches(state.catches, state.ui.visibilityFilter),
-  trips: state.trips,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -20,8 +16,6 @@ const mapDispatchToProps = dispatch => ({
   setVisibility: filter => dispatch(actions.setVisibility(filter)),
   setZoom: zoom => dispatch(actions.setZoom(zoom)),
   setActiveMarker: marker => dispatch(actions.setActiveMarker(marker)),
-  saveTrip: trip => dispatch(actions.saveTrip(trip)),
-  setCenter: pos => dispatch(actions.setCenter(pos)),
   saveCatch: pos => dispatch(actions.saveCatch(pos)),
   saveLocation: pos => dispatch(actions.saveLocation(pos)),
 })

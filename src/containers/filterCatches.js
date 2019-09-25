@@ -10,10 +10,10 @@ const filterCatches = (catches, filters) => {
           case 'species':
             if (filters[filter] !== catchObj.species) return false
             break
-          case 'locations':
+          case 'location':
             if (filters[filter] !== catchObj.location) return false
             break
-          case 'trips':
+          case 'trip':
             if (filters[filter] !== catchObj.trip) return false
             break
           default:

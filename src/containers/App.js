@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 import { actions } from '../slices'
 
 const mapStateToProps = state => ({
+  catches: state.catches,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setCenter: pos => dispatch(actions.setCenter(pos)),
 })
 
 export default GoogleApiWrapper({

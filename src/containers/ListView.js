@@ -1,21 +1,23 @@
 import { connect } from 'react-redux'
 import { actions } from '../slices'
-import VisibilityFilter from '../components/VisFilter'
+import ListView from '../components/ListView'
 
 const mapStateToProps = state => ({
-  currentFilter: state.ui.visibilityFilter,
-  history: state.ui.visibilityHistory,
+  graph: state.ui.graph,
   locations: state.locations,
   species: state.species,
   trips: state.trips,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setVisibility: filter => dispatch(actions.setVisibility(filter)),
+  setCenter: pos => dispatch(actions.setCenter(pos)),
+  setGraph: graph => dispatch(actions.setGraph(graph)),
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(VisibilityFilter)
+)(ListView)
+
+
 

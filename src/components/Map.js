@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
-import getTime from '../getTime'
-import uuid from 'uuid'
-import ReactDOM from 'react-dom'
-import history from '../history'
-import { NavLink } from 'react-router-dom'
 import FishIcon from '../img/fish.png'
-import Map, { Circle, Marker, GoogleApiWrapper } from 'google-maps-react';
+import Map, { Circle, Marker } from 'google-maps-react';
 
 const getBounds = catches => {
   return catches.reduce((acc, item) => {
@@ -23,18 +18,17 @@ class MapComponent extends Component {
     this.bounds = 'first'
   }
   render() {
-    const view = ['editcatch', 'editlocation'].reduce((acc, item) => {
-      if (this.props.location.pathname.includes('/' + item)) return item
-      return acc
-    }, '')
+    const view = 
+      this.props.filter.editcatch ? 'editcatch' : 
+      this.props.filter.movelocation ? 'movelocation' : 'map'
     let fish
     let location
-    console.log(this.props.zoom)
-    let id
-    if (view) id = this.props.location.pathname.split('/').slice(-1)[0]
+    const id = this.props.filter[view]
     if (view === 'editcatch') fish = this.props.allCatches.find(x => x.id === id)
-    if (view === 'editlocation') location = this.props.locations.find(x => x.id === id)
-    const bounds = getBounds(this.props.catches)
+    if (view === 'movelocation') location = this.props.locations.find(x => x.id === id)
+    const visibleItems = [...this.props.filteredCatches]
+    if (this.props.filter.location) visibleItems.push(this.props.locations.find(x => x.id === this.props.filter.location))
+    const bounds = getBounds(visibleItems)
     const boundsChanged = (JSON.stringify(bounds) !== JSON.stringify(this.bounds))
     const setCenter = map => {
       if (Math.abs(map.center.lat() - this.props.center.lat) > 0.000001 &&
@@ -52,7 +46,7 @@ class MapComponent extends Component {
           zoom={this.props.zoom}
           mapType={'satellite'}
           center={this.props.center}
-          bounds={(!view && boundsChanged) ? bounds : null}
+          bounds={(view === 'map' && boundsChanged) ? bounds : null}
           google={this.props.google} 
           onDragend={(mapProps, map) => { 
             setCenter(map)
@@ -62,7 +56,7 @@ class MapComponent extends Component {
           }}
           onBounds_changed={(mapProps, map) => { 
             if (this.bounds !== 'first') {
-              if (!view && boundsChanged) {
+              if (view === 'map' && boundsChanged) {
                 this.bounds = bounds
                 setCenter(map)
               }
@@ -92,7 +86,7 @@ class MapComponent extends Component {
                 />
               )
               break
-            case 'editlocation':
+            case 'movelocation':
               return (
                 <Circle 
                   key={location.id}
@@ -105,17 +99,16 @@ class MapComponent extends Component {
                   fillColor='#FF0000'
                   fillOpacity={0.2}
                   center={location.pos}
-                  radius={50}
+                  radius={location.size * 10}
                 />
               )
               break
             default:
               return this.props.locations.map((item, index) => {
-                return (
+                if (!this.props.filter.location || this.props.filter.location === item.id) return (
                   <Circle 
                     key={item.id}
                     onClick={(props, location, e) => {
-                      history.push(this.props.location.pathname + 'editlocation/' + item.id) 
                     }}
                     strokeColor='transparent'
                     strokeOpacity={0}
@@ -123,15 +116,14 @@ class MapComponent extends Component {
                     fillColor='#FF0000'
                     fillOpacity={0.2}
                     center={item.pos}
-                    radius={50}
+                    radius={item.size * 10}
                   />
                 )
-              }).concat(this.props.catches.map((item, index) => {
+              }).concat(this.props.filteredCatches.map((item, index) => {
                 return (
                   <Marker 
                     key={item.id}
                     onClick={(props, marker, e) => {
-                      history.push(this.props.location.pathname + 'editcatch/' + item.id) 
                     }}
                     icon={FishIcon}
                     title={item.length + ' ' + item.species}

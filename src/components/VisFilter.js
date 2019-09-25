@@ -1,6 +1,4 @@
-import { TransitionGroup, CSSTransition } from 'react-transition-group' 
-import { NavLink, Route } from 'react-router-dom'
-import history from '../history'
+import { CSSTransition } from 'react-transition-group' 
 import React, { Component } from 'react'
 import './VisFilter.css'
 
@@ -10,7 +8,7 @@ class VisibilityFilter extends Component {
     this.state = {currentMenu: ''}
   }
   render() {
-    const showMenu = !(this.props.location.pathname.includes('/editcatch') || this.props.location.pathname.includes('/editlocation') )
+    const showMenu = !(this.props.filter.editcatch || this.props.filter.movelocation)
     return (
       <div>
         <CSSTransition
@@ -19,15 +17,16 @@ class VisibilityFilter extends Component {
           timeout={300}
         >
           <ul className="filter-editor">
-            {[{title: 'Location', slice: 'locations'},{title: 'Trip', slice: 'trips'},{title: 'Species', slice: 'species'},].map(item => {
-              const selectedItem = this.props[item.slice].find(x => x.id === this.props.currentFilter[item.slice]) || ''
+            {[{title: 'Location', slice: 'locations', uri: 'location'},{title: 'Trip', slice: 'trips', uri: 'trip'},{title: 'Species', slice: 'species', uri: 'species'},].map(item => {
+              const selectedItem = this.props[item.slice].find(x => x.id === this.props.filter[item.uri]) || ''
               const currentMenu = (this.state.currentMenu === item.title)
               const deselectMenu = () => {
-                if (item.title === this.state.currentMenu) this.setState({currentMenu: ''})
+                this.setState({currentMenu: ''})
                 document.removeEventListener('click', deselectMenu)
               }
               return (
                 <CSSTransition
+                  key={item.title}
                   in={showMenu}
                   classNames="filter-buttons-toggle"
                   timeout={300}
@@ -51,7 +50,7 @@ class VisibilityFilter extends Component {
                             <div> 
                               <div onClick={(e) => {
                                 e.stopPropagation(); 
-                                this.props.setVisibility({...this.props.currentFilter, [item.slice]: null})}}
+                                this.props.changeUri(item.uri, null) }}
                                 className="deselect-button"
                               >
                                 X
@@ -70,13 +69,15 @@ class VisibilityFilter extends Component {
                           {this.props[item.slice].map(menuItem => {
                             if (!selectedItem || this.props.currentFilter[item.slice] !== menuItem.id) return (
                               <CSSTransition
-                                in={(this.state.currentMenu === item.title) && showMenu}
+                                key={menuItem.id}
+                                in={(this.state.currentMenu === item.title && showMenu)}
                                 classNames="dropdown-item-transition"
                                 timeout={300}
                               >
                                 <li 
+                                  key={menuItem.id}
                                   className="dropdown-item"
-                                  onClick={() => {this.props.setVisibility({...this.props.currentFilter, [item.slice]: menuItem.id})}} >
+                                  onClick={() => this.props.changeUri(item.uri, menuItem.id)} >
                                   {menuItem.name}
                                 </li>
                               </CSSTransition>

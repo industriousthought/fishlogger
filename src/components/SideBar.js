@@ -1,19 +1,16 @@
-import { TransitionGroup, CSSTransition } from 'react-transition-group' 
+import { CSSTransition } from 'react-transition-group' 
+import EditLocation from '../containers/EditLocation'
+import EditCatch from '../containers/EditCatch'
+import MoveLocation from '../containers/MoveLocation'
 import React, { Component } from 'react'
 import getTime from '../getTime'
 import uuid from 'uuid'
-import ReactDOM from 'react-dom'
-import history from '../history'
 
 class SideBar extends Component {
-  constructor(props) {
-    super(props)
-  }
   catchFish = () => {
     const id = uuid()
     let currentTrip = this.props.trips[0]
     const lastFish = this.props.catches[0]
-    console.log(currentTrip)
     if (currentTrip) {
       if (!currentTrip.stop && getTime() - lastFish.time > 21600000) {
         currentTrip = {...currentTrip, stop: lastFish.time}
@@ -37,12 +34,12 @@ class SideBar extends Component {
       ...defaultCatch
     })
     this.props.setZoom({zoom: 19})
-    history.push(this.props.location.pathname + 'editcatch/' + id) 
+    this.props.changeUri('editcatch', id)
   }
   geolocate = pos => {
     geolocate(pos => {
-      if (this.props.location.pathname.includes('/editcatch')) {
-        const fish = this.props.catches.find(x => x.id === this.props.match.params.id)
+      if (this.props.filter.editcatch) {
+        const fish = this.props.catches.find(x => x.id === this.props.filter.editcatch)
         this.props.saveCatch({...fish, pos: pos})
       }
       this.props.setCenter(pos)
@@ -50,50 +47,88 @@ class SideBar extends Component {
     })
   }
   render() {
+    const filter = this.props.filter
     return (
-      <ul className="sidebar opacity-toggle">
+      <ul className="sidebar">
         <CSSTransition
-          in={/^(?!.*(\/graph)).*$/.test(this.props.location.pathname)}
+          in={!filter.list && !filter.graph && !filter.list && !filter.movelocation}
           classNames="opacity-toggle"
           timeout={300}
         >
           <li 
             onClick={this.geolocate}
-            className="location-button">
+            className="sidebar-button">
             Geolocate
           </li>
         </CSSTransition>
         <CSSTransition
-          in={/^(?!.*(\/editcatch|\/graph|\/editlocation)).*$/.test(this.props.location.pathname)}
+          in={filter.location && !filter.editcatch && !filter.movelocation && !filter.list && !filter.graph && !filter.list}
+          classNames="opacity-toggle"
+          timeout={300}
+          unmountOnExit
+        >
+          <EditLocation {...this.props} />
+        </CSSTransition>
+        <CSSTransition
+          in={filter.movelocation}
+          classNames="opacity-toggle"
+          timeout={300}
+          unmountOnExit
+        >
+          <MoveLocation movingLocation={filter.movelocation} changeUri={this.props.changeUri}/>
+        </CSSTransition>
+        <CSSTransition
+          in={filter.editcatch}
+          classNames="opacity-toggle"
+          timeout={300}
+          unmountOnExit
+        >
+          <EditCatch changeUri={this.props.changeUri} editingCatch={filter.editcatch} />
+        </CSSTransition>
+        <CSSTransition
+          in={(!filter.list && !filter.graph && !filter.movelocation && !filter.editcatch)}
           classNames="opacity-toggle"
           timeout={300}
         >
           <li
             onClick={() => {
-              history.push('/graph') 
+              this.props.changeUri('list', true)
             }}
-            className="location-button">
+            className="sidebar-button">
+            List
+          </li>
+        </CSSTransition>
+        <CSSTransition
+          in={(!filter.list && !filter.graph && !filter.movelocation && !filter.editcatch)}
+          classNames="opacity-toggle"
+          timeout={300}
+        >
+          <li
+            onClick={() => {
+              this.props.changeUri('graph', true)
+            }}
+            className="sidebar-button">
             Graph
           </li>
         </CSSTransition>
         <CSSTransition
-          in={/^(?!.*(\/editcatch|\/graph|\/editlocation)).*$/.test(this.props.location.pathname)}
+          in={(!filter.list && !filter.graph && !filter.movelocation && !filter.editcatch)}
           classNames="opacity-toggle"
           timeout={300}
         >
           <li 
-            className="location-button" 
+            className="sidebar-button" 
             onClick={this.catchFish}>
             Catch Fish
           </li>
         </CSSTransition>
         <CSSTransition
-          in={/^(?!.*(\/editcatch|\/graph|\/editlocation)).*$/.test(this.props.location.pathname)}
+          in={(!filter.graph && !filter.list && !filter.movelocation && !filter.editcatch)}
           classNames="opacity-toggle"
           timeout={300}
         >
           <li 
-            className="location-button" 
+            className="sidebar-button" 
             onClick={() => {
               const id = uuid()
               this.props.saveLocation({
@@ -101,7 +136,7 @@ class SideBar extends Component {
                 id,
                 pos: this.props.center,
               })
-              history.push('/editlocation/' + id) 
+              this.props.changeUri('movelocation', id)
             }}
           >
             Save Location
